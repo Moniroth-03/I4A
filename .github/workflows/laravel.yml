@@ -1,23 +1,26 @@
-name: I4A-Laravel
+#Name of the workflows
+name: Laravel For DourngDariya
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "devops" ]
+    #When push branch have many, branches: ["main", "devops"]
   pull_request:
     branches: [ "main" ]
 
-jobs:
-  laravel-tests:
+jobs: #stages
+  laravel-tests: #stage("laravel-test") #stage name
 
-    runs-on: window-latest
+    runs-on: ubuntu-latest #agent(in jenkins) runner(in Github) 
+    #runs-on: window-latest runs-on: macos-latest
 
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.0'
-    - uses: actions/checkout@v4
+        php-version: '8.0' #set up php version 8 into ubuntu
+    - uses: actions/checkout@v4 #checkout branch
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');" #(if there no .env, then copy .env.example to .env)
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
@@ -28,7 +31,7 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
+    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest 
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
